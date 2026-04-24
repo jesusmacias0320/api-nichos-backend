@@ -12,7 +12,10 @@ const app = express();
 
 
 //Middlewares globales
-app.use(cors()); 
+app.use(cors({
+    origin: 'https://nichos-frontend-uuqf.vercel.app', // Tu dominio exacto de Vercel (sin la barra / al final)
+    credentials: true // Permite que viajen las cookies y los tokens de sesión
+}));
 app.use(express.json());
 
 //Usar las rutas
