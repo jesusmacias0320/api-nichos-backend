@@ -13,7 +13,7 @@ router.post('/', verifyToken,isAdmin,nicheController.createNiche);
 
 router.put('/:id/transfer', verifyToken, isAdmin, nicheController.transferNiche);
 
-router.put('/:id/release', nicheController.releaseNiche);
+router.put('/:id/release', verifyToken, isAdmin, nicheController.releaseNiche);
 
 
 module.exports = router;
