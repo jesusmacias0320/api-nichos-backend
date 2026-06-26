@@ -15,5 +15,6 @@ router.put('/:id/transfer', verifyToken, isAdmin, nicheController.transferNiche)
 
 router.put('/:id/release', verifyToken, isAdmin, nicheController.releaseNiche);
 
+router.put('/:id', verifyToken, isAdmin, nicheController.updateNiche);
 
 module.exports = router;

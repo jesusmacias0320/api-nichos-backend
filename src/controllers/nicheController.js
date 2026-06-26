@@ -164,8 +164,40 @@ const releaseNiche = async (req, res) => {
         res.status(500).json({error: 'Error al liberar el nicho', detalle: err.message});
     }
 };
+ //Editar Nicho
+ const updateNiche = async (req, res) => {
+    const { id } = req.params;
+    const { codigo, ubicacion, dueño, fallecido, nacimiento, defuncion } = req.body;
+
+    try {
+        // Usamos los nombres reales de las columnas en tu base de datos (inglés)
+        const updateQuery = `
+            UPDATE niches 
+            SET code = $1, location = $2, owner_id = $3, deceased_name = $4, birth_date = $5, death_date = $6 
+            WHERE id = $7 
+            RETURNING *;
+        `;
+        
+        // Formateamos los valores asegurando que lleguen nulos si están vacíos
+        const values = [codigo, ubicacion, dueño || null, fallecido || null, nacimiento || null, defuncion || null, id];
+        
+        // Cambiamos pool.query por db.query
+        const result = await db.query(updateQuery, values);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Nicho no encontrado' });
+        }
+        
+        res.status(200).json({ 
+            message: 'Nicho actualizado correctamente', 
+            nicho: result.rows[0] 
+        });
+    } catch (error) {
+        console.error('Error al actualizar nicho:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
 
 
 
-
-module.exports = {getAllNiches, createNiche, transferNiche, getTransferHistory, getMyNiches, releaseNiche};
+module.exports = {getAllNiches, createNiche, transferNiche, getTransferHistory, getMyNiches, releaseNiche, updateNiche};
